@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var url = 'mongodb://52.78.29.249:27017/applist';
+var url = 'mongodb://52.78.29.249:27017/apps';
 mongoose.connect(url);
 var conn = mongoose.connection;
 
