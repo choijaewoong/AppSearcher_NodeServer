@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var url = 'mongodb://52.78.29.249:27017/apps';
+var url = 'mongodb://52.78.29.249:27017/appsearcher';
 mongoose.connect(url);
 var conn = mongoose.connection;
 
@@ -23,7 +23,8 @@ var App = mongoose.model('App', AppSchema);
 var UserSchema = mongoose.Schema({
     name : {type: String, required: true},
     email : {type: String, required: true, unique: true},
-    password : String
+    password : String,
+    salt : String
 });
 var User = mongoose.model('User', UserSchema);
 

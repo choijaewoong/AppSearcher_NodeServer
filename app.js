@@ -6,6 +6,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(morgan('dev'));
 app.use(require('./router/appRouter'));
+app.use(require('./router/userRouter'));
 app.use(handleError);
 
 app.listen(3000);
