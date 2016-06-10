@@ -18,7 +18,14 @@ var AppSchema = mongoose.Schema({
    package_name : String,
    activity_name : String   
 });
-
 var App = mongoose.model('App', AppSchema);
 
-module.exports = App;
+var UserSchema = mongoose.Schema({
+    name : {type: String, required: true},
+    email : {type: String, required: true, unique: true},
+    password : String
+});
+var User = mongoose.model('User', UserSchema);
+
+module.exports.App = App;
+module.exports.User = User;

@@ -1,5 +1,5 @@
 var express = require('express');
-var App = require('./appModel');
+var App = require('../models/appModel').App;
 var router = express.Router();
 
 router.get('/applist', showAppList);
