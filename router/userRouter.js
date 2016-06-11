@@ -1,13 +1,59 @@
 var express = require('express');
-var User = require('../models/appModel').User;
+var session = require('express-session');
 var router = express.Router();
+var User = require('../models/appModel').User;
 var crypto = require("crypto"); // 암호화 모듈
+var passport = require('passport');
 
-// router.post('/signin', signIn);
+router.use(session({
+    resave:false,
+    saveUninitialized:false,
+    secret:'Secret Key'
+}));
+
+router.use(passport.initialize());
+router.use(passport.session());
+
+var LocalStrategy = require('passport-local').Strategy;
+var strategy = new LocalStrategy({
+        usernameField : 'email',
+        passwordField : 'password'        
+    }, function(email, password, done) {    
+        User.findOne({email : email}).then(
+            function fulfilled(result){
+                if(!result){
+                    done(null, false, {message: '존재하지 않는 이메일 입니다.'});
+                }
+                if(result.password === encryptPW(password, result.salt)){         
+                    var userinfo = { _id: result._id, name: result.name, email: result.email};
+                    done(null, userinfo);
+                } else{
+                    done(null, false, {message: '비밀번호가 다릅니다.'});
+                }
+            }, function rejected(err){
+                  err.code = 500;
+                  next(err);
+            });});
+passport.use(strategy);
+
+passport.serializeUser(function(user, done) {
+   console.log("세션 기록");
+   done(null, user); 
+});
+
+passport.deserializeUser(function(user, done) {
+    console.log('세션에서 사용자 정보 읽기');
+    done(null, user);
+});
+
+router.post('/signin', passport.authenticate('local'), signIn);
 router.post('/signup', signUp);
-// router.post('/signout', signOut);
+router.get('/signout', signOut);
 
-// function signIn(req, res, next){}
+function signIn(req, res){   
+    res.send(req.user);
+}
+
 function signUp(req, res, next){
     var name = req.body.name;
     var email = req.body.email;
@@ -26,7 +72,10 @@ function signUp(req, res, next){
         next(err);
     });
 }
-// function signOut(req, res, next){}
+function signOut(req, res){
+    req.logout();
+    res.send({msg:'success'});
+}
 
 // 패스워드 암호화
 function encryptPW(pw, salt){
