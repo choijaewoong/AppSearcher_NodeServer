@@ -22,11 +22,12 @@ var strategy = new LocalStrategy({
         User.findOne({email : email}).then(
             function fulfilled(result){
                 if(!result){
+                    // done(null, false, req.flash('message', '존재하지 않는 이메일 입니다.'));
                     done(null, false, {message: '존재하지 않는 이메일 입니다.'});
                 }
                 if(result.password === encryptPW(password, result.salt)){         
                     var userinfo = { _id: result._id, name: result.name, email: result.email};
-                    done(null, userinfo);
+                    done(null, {message: "success", user: userinfo});
                 } else{
                     done(null, false, {message: '비밀번호가 다릅니다.'});
                 }
@@ -46,14 +47,22 @@ passport.deserializeUser(function(user, done) {
     done(null, user);
 });
 
-router.post('/signin', passport.authenticate('local'), signIn);
-router.post('/signup', signUp);
-router.get('/signout', signOut);
-
-function signIn(req, res){   
-    res.send(req.user);
-}
-
+// 로그인 요청
+router.post('/signin', passport.authenticate('local', {
+    successRedirect: '/signinSuccess',
+    failureRedirect: '/signinFailure'
+  })
+);
+// 로그인 실패
+router.get('/signinFailure', function(req, res) {
+    res.send({message : "fail"});
+});
+// 로그인 성공
+router.get('/signinSuccess', function(req, res) {
+  res.send(req.user);
+});
+router.post('/signup', signUp); // 회원가입
+router.get('/signout', signOut); // 로그아웃
 function signUp(req, res, next){
     var name = req.body.name;
     var email = req.body.email;
