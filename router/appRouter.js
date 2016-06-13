@@ -17,15 +17,15 @@ router.post('/addapp', addApp);
 
 // 모든 앱 리스트 출력 메소드
 function showAppList(req, res, next) {
-   var user = req.user;
+   var user = req.user.user;
    if(!user){
        res.sendStatus(401);
    }else{ 
-        App.find({user_email: user.email},{_id:1, name:1, image:1}).then(function fulfilled(docs) {
+        App.find({user_email: user.email}).then(function fulfilled(docs) {
             console.log('Success : ');
             var result = {
                 count : docs.length,
-                data : docs
+                apps : docs
             };
             res.send(result);
         }, function rejected(err) {
@@ -36,8 +36,8 @@ function showAppList(req, res, next) {
 }
 
 // 앱 추가 메소드
-function addApp(req, res, next) {
-   var user = req.user;
+function addApp(req, res, next) { 
+   var user = req.user.user;
    if(!user){
        res.sendStatus(401);
    }else{ 
@@ -52,7 +52,7 @@ function addApp(req, res, next) {
                            user_email:user.email});
         app.save().then(function fulfilled(result){
             console.log(result);
-            res.send({msg:'success', id:result._id});
+            res.send({ app : result});
         }, function rejected(err) {
             err.code = 500;
             next(err);      

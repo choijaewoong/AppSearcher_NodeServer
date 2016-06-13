@@ -17,7 +17,7 @@ var AppSchema = mongoose.Schema({
    image : String,
    package_name : String,
    activity_name : String,
-   user_email : String
+   user_email : {type: String, default: ""}
 });
 var App = mongoose.model('App', AppSchema);
 
