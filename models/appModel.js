@@ -37,7 +37,7 @@ var PostSchema = mongoose.Schema({
     user_name : String,
     app_evaluation : String,
     app_image : String,
-    write_date : Int32  
+    write_date : String  
 });
 var Post = mongoose.model('Post', PostSchema);
 
