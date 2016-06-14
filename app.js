@@ -8,6 +8,7 @@ app.use(morgan('dev'));
 app.use(require('./router/appRouter'));
 app.use(require('./router/userRouter'));
 app.use(require('./router/postRouter'));
+app.use(require('./router/recommendAppRouter'));
 app.use(handleError);
 
 app.listen(3000);

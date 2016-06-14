@@ -22,6 +22,14 @@ var AppSchema = mongoose.Schema({
 });
 var App = mongoose.model('App', AppSchema);
 
+var RecommendAppSchema = mongoose.Schema({
+    name : String,
+    image : String,
+    description : String,
+    download_url :String
+});
+var RecommendApp = mongoose.model('RecommendApp', RecommendAppSchema);
+
 // User 스키마
 var UserSchema = mongoose.Schema({
     name : {type: String, required: true},
@@ -42,5 +50,6 @@ var PostSchema = mongoose.Schema({
 var Post = mongoose.model('Post', PostSchema);
 
 module.exports.App = App;
+module.exports.RecommendApp = RecommendApp;
 module.exports.User = User;
 module.exports.Post = Post;
