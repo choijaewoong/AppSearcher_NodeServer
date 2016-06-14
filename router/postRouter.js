@@ -21,7 +21,7 @@ function showPostList(req, res, next) {
    if(!user){
        res.sendStatus(401);
    }else{ 
-        Post.find().then(function fulfilled(docs) {
+        Post.find({}).sort({_id : -1}).then(function fulfilled(docs) {
             console.log('Success : ');
             var result = {
                 count : docs.length,

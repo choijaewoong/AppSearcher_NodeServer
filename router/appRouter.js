@@ -21,7 +21,7 @@ function showAppList(req, res, next) {
    if(!user){
        res.sendStatus(401);
    }else{ 
-        App.find({user_email: user.email}).then(function fulfilled(docs) {
+        App.find({user_email: user.email}).sort({name: 1}).then(function fulfilled(docs) {
             console.log('Success : ');
             var result = {
                 count : docs.length,
